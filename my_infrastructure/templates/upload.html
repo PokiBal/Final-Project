@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Upload Status</title>
+    <style>
+        .loading-indicator {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+  
+        .loading-indicator img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+    <script>
+        setTimeout(function() {
+            var statusMessageElement = document.getElementById("status-message");
+            statusMessageElement.innerHTML = "{{ message2 }}";
+            var loadingIndicatorElement = document.querySelector(".loading-indicator");
+            loadingIndicatorElement.style.display = "none";
+        }, 10000); // Change message after 5 seconds (5000 milliseconds)
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Status:</h1>
+        <div id="result-message" style="display: none;">
+            <p id="result-text"></p>
+        </div>
+        <p id="status-message">{{ message1 }}</p>
+        <div class="loading-indicator">
+            <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading Indicator">
+        </div>
+    </div>
+</body>
+</html>

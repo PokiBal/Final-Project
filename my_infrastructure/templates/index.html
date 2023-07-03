@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <title>Build and Run Image</title>
+    <style>
+        .form-row {
+            position: relative; /* Add this style to make the loading indicator position relative to the form row */
+        }
+
+        /* Remove the hover effect on the button */
+        button[type="submit"]:hover {
+            background-color: transparent;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2> Build New Image </h1>
+
+        <form action="/" method="post">
+            <div class="form-row">
+                <input type="text" placeholder="Enter Image name" name="image_name" required>
+                <input type="hidden" name="submit_image_name" value="true">
+                <button type="submit">Build New Image</button>
+            </div>
+        </form>
+
+        <h2> Jenkins Functionality </h2>
+
+        <form action="/" method="post">
+            <div class="form-row">
+                <input type="text" placeholder="Enter Job name" name="job_name" required>
+                <input type="hidden" name="create_job" value="true">
+                <button type="submit">Create New Job</button>
+            </div>
+        </form>
+
+        <form action="/" method="post">
+            <div class="form-row">
+                <input type="text" placeholder="Enter your name" name="user_name" required>
+                <input type="text" placeholder="Enter your password" name="password" required>
+                <input type="hidden" name="create_user" value="true">
+                <button type="submit">Create New Jenkins User</button>
+            </div>
+        </form>
+
+        <h2> AWS Functionality </h2>
+
+        <form action="/" method="post">
+            <div class="form-row">
+                <input type="text" placeholder="Enter IAM name" name="user_name" required>
+                <input type="text" placeholder="Enter IAM password" name="password" required>
+                <input type="hidden" name="create_IAM" value="true">
+                <button type="submit">Create New IAM User</button>
+            </div>
+        </form>
+
+        <form action="/" method="post">
+            <div class="form-row">
+                <input type="text" placeholder="Enter EC2 name" name="instance_name" required>
+                <input type="hidden" name="create_EC2" value="true">
+                <button type="submit">Create EC2</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

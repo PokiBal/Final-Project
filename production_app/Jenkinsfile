@@ -1,0 +1,93 @@
+pipeline {
+    agent {label "slave1"}
+
+    environment {
+        TIME = sh(script: 'date "+%Y-%m-%d %H:%M:%S"', returnStdout: true).trim()
+    }
+
+    parameters {
+        string(name: 'imagename', defaultValue: '', description: 'Name of the Docker image')
+        string(name: 'imagetag', defaultValue: '', description: 'Image tag for Docker build')
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                dir('/home/ubuntu/workspace/build and test pipeline/') {
+                    sh 'rm -rf *'
+                    sh 'git clone https://github.com/PokiBal/MyProject_1.git'
+                }
+            }
+        }
+        stage('Build DockerImage'){
+            steps{
+                echo "build image"
+                dir('/home/ubuntu/workspace/build and test pipeline/MyProject_1/production_app'){
+                sh "docker build -t ${params.imagename}:${params.imagetag} ."
+                }
+            }
+        }
+        stage('Run Container'){
+            steps{
+                sh "docker run -it --name flask-app -p 5000:5000 -d ${params.imagename}:${params.imagetag}"
+                }
+        }
+        stage("build user") {
+            steps{
+                wrap([$class: 'BuildUser', useGitAuthor: true]) {
+                    sh "export USERNAME=${BUILD_USER}"
+                }
+            }
+        }
+
+        stage('test application') {
+            steps {
+                echo "test"
+                dir('/home/ubuntu/workspace/build and test pipeline/MyProject_1/production_app'){
+                sh 'pytest tests.py::Test_class --html=test_report.html'
+                }
+            }
+        }
+        stage ('upload to s3 bucket'){
+            steps{
+            dir('/home/ubuntu/workspace/build and test pipeline/MyProject_1/production_app') {
+                withAWS(credentials: 'aws-credentials'){
+                     sh 'aws s3 cp test_report.html s3://project1-results'
+                }
+            }
+            }
+        }
+
+        stage('UploadToDynamoDB') {
+            steps {       
+            dir('/home/ubuntu/workspace/build and test pipeline/MyProject_1/production_app') {
+                script {
+                    def log_entry = sh(script: 'python3.8 logfile.py', returnStdout: true).trim()
+                    def (timestamp, message) = log_entry.split(',')
+                    message = message.replaceAll('"', '\\"') // add this line to escape quotation marks
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1') {
+                    sh "aws dynamodb put-item --table-name project_build_report --item \"{\\\"user\\\": {\\\"S\\\": \\\"${env.BUILD_USER}\\\"}, \\\"date\\\": {\\\"S\\\": \\\"${timestamp}\\\"}, \\\"result\\\": {\\\"S\\\": \\\"${message}\\\"}}\""
+                    }
+                }
+            }
+            }
+        }
+        stage('UploadImageToDockerHub') {
+        steps {
+            script {
+                def dockerImageName = "${params.imagename}:${params.imagetag}"
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_PASSWORD"
+                    echo "login"
+                    sh "docker tag ${dockerImageName} puki121/project:${params.imagename}v${params.imagetag}"
+                    sh "docker push puki121/project:${params.imagename}v${params.imagetag}"
+                    build job: 'production_2', parameters: [
+                    string(name: 'imagename', value: params.imagename),
+                    string(name: 'imagetag', value: params.imagetag)]                
+                    }
+            }
+        }
+        }
+    }
+}
+

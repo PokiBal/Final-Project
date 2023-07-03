@@ -1,0 +1,85 @@
+body {
+  background-image: url('cloud_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.loading-indicator {
+  display: none;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.loading-indicator img {
+  width: 30px;
+  height: 30px;
+}
+
+.container {
+  margin: 15px;
+  max-width: 500px; /* Set the maximum width of the form container */
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 50px;
+  border-radius: 15px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.label-container {
+  flex-basis: 200px;
+  flex-shrink: 0;
+  font-weight: bold;
+  color: #666181;
+}
+
+.input-container {
+  position: relative;
+  flex-grow: 1;
+}
+
+input[type="text"] {
+  width: 60%;
+  padding: 10px;
+  border: 1px solid #635e7f;
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  flex-basis: auto;
+  margin-left: 20px;
+  background-color: #607d8b;
+  color: #cfccde;
+  border: none;
+  padding: 8px 8px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+button[type="submit"]:hover {
+  background-color: #ced5d8;
+}
+
+
+
+h2, h1 {
+  color: #333;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 5px;
+}

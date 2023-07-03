@@ -1,0 +1,24 @@
+<!-- config = ''' -->
+<project>
+<actions/>
+<description>Build and Run the docker file from the Production environment</description>
+<keepDependencies>fales</keepDependencies>
+<properties/>
+<scm class="hudson.scm.NullSCM"/>
+<canRoam>true</canRoam>
+<disabled>fales</disabled>
+<triggers/>
+<concurrentBuild>fales</concurrentBuild>
+<builders>
+    <hudson.tasks.Shell>
+      <command>
+      sh 'docker pull stacksimplify/dockerintro-springboot-helloworld-rest-api:1.0.0-RELEASE '
+      sh 'docker build -t flask_docker .'
+      sh 'docker run -p 5000:5000 -d flask_docker'
+      </command>
+    </hudson.tasks.Shell>
+</builders>
+<publishers/>
+<builWrappers/>
+</project>
+<!-- ''' -->
