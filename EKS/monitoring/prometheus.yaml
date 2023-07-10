@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'flask'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['a61892bf2cec744dfb3bf11bae6efcb4-1269713099.us-west-2.elb.amazonaws.com']
+

@@ -3,9 +3,12 @@ import os.path
 from flask import Flask, request, redirect,render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask.templating import render_template
+from prometheus_flask_exporter import PrometheusMetrics
 
 
 app =  Flask(__name__)
+metrics = PrometheusMetrics(app)
+
 
 #this line connect to the db and create new db named registrations
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///registrations.db'
