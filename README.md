@@ -24,13 +24,11 @@ Kubernetes is also used for managing deployment on an Amazon EKS cluster, ensuri
 - Flask - A micro web framework written in Python.
 - Docker - An open platform for developing, shipping, and running applications inside software containers.
 - Jenkins - An open source automation server which enables developers to reliably build, test, and deploy their software.
-- AWS Services (EC2, S3, DynamoDB, CloudWatch) - A collection of cloud services offered by Amazon Web Services.
+- AWS Services (EC2, S3, DynamoDB, CloudWatch, EKS) - A collection of cloud services offered by Amazon Web Services.
 - Kubernetes - An open-source system for automating deployment, scaling, and management of containerized applications.
 - Prometheus, Grafana - Used for monitoring and visualizing metrics from the Kubernetes cluster.
 
 
 <a name="authors"></a>
 ## Authors
-- Inbal Rozenfeld - Initial work - [YourGitHubProfile](https://github.com/YourGitHubProfile)
-
-See also the list of [contributors](https://hub.docker.com/u/puki121) who participated in this project.
+- Inbal Rozenfeld - (https://github.com/PokiBal)
