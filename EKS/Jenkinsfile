@@ -33,13 +33,13 @@ pipeline {
         }
         stage('Deploy to cluser') {
             steps {
-                dir('/home/ubuntu/workspace/deployment/Final-application/EKS') {
-                sh 'kubectl apply -f flask-namespace.yaml' 
-                sh 'kubectl apple -f flask-deployment.yaml'
-                sh 'kubectl apple -f flask-service.yaml'
-                sh 'kubectl get services -n flask-namespace'
+                dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
+                    sh 'kubectl apply -f flask-namespace.yaml' 
+                    sh 'kubectl apply -f flask-deployment.yaml'
+                    sh 'kubectl apply -f flask-service.yaml'
+                    sh 'kubectl get services -n flask-namespace'
+                    }
                 }
             }
-        }
     }
 }
