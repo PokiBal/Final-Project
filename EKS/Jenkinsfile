@@ -15,9 +15,16 @@ pipeline {
                 }
             }
         }
-        stage('Cluster Connection') {
+        stage('Cluster check connection') {
             steps {
-                sh 'eksctl utils write-kubeconfig --cluster=deployment' 
+                sh 'kubectl get nodes'
+            }
+        }
+        stage('Modify Deployment YAML') {
+            steps {
+                script {
+                    sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' deployment.yaml"
+                }
             }
         }
         stage('Deploy to cluser') {
