@@ -1,0 +1,34 @@
+
+pipeline {
+    agent {label "deployment"}
+
+    parameters {
+        string(name: 'imagetag', defaultValue: '', description: 'Image tag for Docker build')
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                dir('/home/ubuntu/workspace/deployment/') {
+                    sh 'rm -rf *'
+                    sh 'git clone https://github.com/PokiBal/Final-Project.git'
+                }
+            }
+        }
+        stage('Cluster Connection') {
+            steps {
+                sh 'eksctl utils write-kubeconfig --cluster=deployment' 
+            }
+        }
+        stage('Deploy to cluser') {
+            steps {
+                dir('/home/ubuntu/workspace/deployment/Final-application/EKS') {
+                sh 'kubectl apply -f flask-namespace.yaml' 
+                sh 'kubectl apple -f flask-deployment.yaml'
+                sh 'kubectl apple -f flask-service.yaml'
+                sh 'kubectl get services -n flask-namespace'
+                }
+            }
+        }
+    }
+}
