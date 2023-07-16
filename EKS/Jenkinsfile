@@ -15,11 +15,12 @@ pipeline {
                 }
             }
         }
-        // stage('Cluster check connection') {
-        //     steps {
-        //         sh 'kubectl get nodes'
-        //     }
-        // }
+        stage('Cluster check connection') {
+            steps {
+                sh 'eksctl utils write-kubeconfig --cluster=my-deployment'
+                sh 'kubectl get nodes'
+            }
+        }
         stage('Modify Deployment YAML') {
             steps {
                 script {
