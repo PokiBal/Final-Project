@@ -23,7 +23,11 @@ pipeline {
         stage('Modify Deployment YAML') {
             steps {
                 script {
-                    sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' deployment.yaml"
+                    dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
+                        script {
+                            sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' flask-deployment.yaml"
+                        } 
+                    }
                 }
             }
         }
