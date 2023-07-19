@@ -50,14 +50,14 @@ pipeline {
                             returnStdout: true
                         ).trim()
                         dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/monitoring') {
-                            sh 'echo "Load Balancer External IP:"'
-                            sh 'echo ${loadBalancerExternalIP}'
-                            sh 'kubectl get services -n flask-namespace'
-                        //sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' flask-deployment.yaml"
-                            sh "sed -i 's|targets: \\[\\]|targets: [\"${loadBalancerExternalIP}\"]|' prometheus.yaml"
-                            sh 'echo "Modified docker-compose.yaml:"'
-                            sh 'cat prometheus.yaml'
-                            sh 'docker-compose up -d'
+                        sh 'echo "Load Balancer External IP:"'
+                        def serviceOutput = sh(returnStdout: true, script: 'kubectl get services -n flask-namespace')
+                        def loadBalancerExternalIP = serviceOutput.tokenize()[5]
+                        sh 'echo ${loadBalancerExternalIP}'
+                        sh "sed -i 's|targets: \\[.*\\]|targets: [\"${loadBalancerExternalIP}\"]|' prometheus.yaml"
+                        sh 'echo "Modified prometheus.yaml:"'
+                        sh 'cat prometheus.yaml'
+                        sh 'docker-compose up -d'
                         }
                     }
                 }
