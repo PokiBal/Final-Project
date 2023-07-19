@@ -53,9 +53,9 @@ pipeline {
                             sh 'echo "Load Balancer External IP:"'
                             sh 'echo ${loadBalancerExternalIP}'
                             sh 'kubectl get services -n flask-namespace'
-                            sh "sed -i \"s|flask-service:a61892bf2cec744dfb3bf11bae6efcb4-1269713099.us-west-2.elb.amazonaws.com|flask-service:${loadBalancerExternalIP}|\" docker-compose.yaml"
+                            sh "sed -i \"s|flask-service:a61892bf2cec744dfb3bf11bae6efcb4-1269713099.us-west-2.elb.amazonaws.com|flask-service:${loadBalancerExternalIP}|\" prometheus.yaml"
                             sh 'echo "Modified docker-compose.yaml:"'
-                            sh 'cat docker-compose.yaml'
+                            sh 'cat prometheus.yaml'
                             sh 'docker-compose up -d'
                         }
                     }
