@@ -51,7 +51,7 @@ pipeline {
                         ).trim()
 
                         dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/monitoring') {
-                            sh "sed -i 's|your-service-name:${loadBalancerExternalIP}|' docker-compose.yaml"
+                            sh "sed -i 's|flask-service:${loadBalancerExternalIP}|flask-service:${loadBalancerExternalIP}|' docker-compose.yaml"
                             sh 'docker-compose up -d'
                         }
                     }
