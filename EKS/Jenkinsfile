@@ -42,5 +42,20 @@ pipeline {
                     }
                 }
             }
+            stage('Configure Monitoring') {
+                steps {
+                    script {
+                        def loadBalancerExternalIP = sh(
+                            script: "aws elbv2 describe-load-balancers --query 'LoadBalancers[?contains(LoadBalancerName, `k8s`) && contains(LoadBalancerName, `flask-service`)].DNSName' --output text",
+                            returnStdout: true
+                        ).trim()
+
+                        dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/monitoring') {
+                            sh "sed -i 's|your-service-name:${loadBalancerExternalIP}|' docker-compose.yaml"
+                            sh 'docker-compose up -d'
+                        }
+                    }
+                }
+            }
     }
 }
