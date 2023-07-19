@@ -54,7 +54,7 @@ pipeline {
                             sh 'echo ${loadBalancerExternalIP}'
                             sh 'kubectl get services -n flask-namespace'
                         //sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' flask-deployment.yaml"
-                            sh "sed -i 's|targets: \[\]|targets: [\"${loadBalancerExternalIP}\"]|' prometheus.yaml"
+                            sh "sed -i 's|targets: \\[\\]|targets: [\"${loadBalancerExternalIP}\"]|' prometheus.yaml"
                             sh 'echo "Modified docker-compose.yaml:"'
                             sh 'cat prometheus.yaml'
                             sh 'docker-compose up -d'
