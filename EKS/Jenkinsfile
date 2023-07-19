@@ -26,6 +26,7 @@ pipeline {
                 script {
                     dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
                         script {
+                            echo "${params.imagetag}"
                             sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' flask-deployment.yaml"
                         } 
                     }
