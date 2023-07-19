@@ -7,41 +7,41 @@ pipeline {
     }
 
     stages {
-        stage('Clone') {
-            steps {
-                dir('/home/ubuntu/workspace/deployment/') {
-                    sh 'rm -rf *'
-                    sh 'git clone https://github.com/PokiBal/Final-Project.git'
-                }
-            }
-        }
-        stage('Cluster check connection') {
-            steps {
-                sh 'eksctl utils write-kubeconfig --cluster=my-deployment'
-                sh 'kubectl get nodes'
-            }
-        }
-        stage('Modify Deployment YAML') {
-            steps {
-                script {
-                    dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
-                        script {
-                            sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' flask-deployment.yaml"
-                        } 
-                    }
-                }
-            }
-        }
-        stage('Deploy to cluser') {
-            steps {
-                dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
-                    sh 'kubectl apply -f flask-namespace.yaml' 
-                    sh 'kubectl apply -f flask-deployment.yaml'
-                    sh 'kubectl apply -f flask-service.yaml'
-                    sh 'kubectl get services -n flask-namespace'
-                    }
-                }
-            }
+        // stage('Clone') {
+        //     steps {
+        //         dir('/home/ubuntu/workspace/deployment/') {
+        //             sh 'rm -rf *'
+        //             sh 'git clone https://github.com/PokiBal/Final-Project.git'
+        //         }
+        //     }
+        // }
+        // stage('Cluster check connection') {
+        //     steps {
+        //         sh 'eksctl utils write-kubeconfig --cluster=my-deployment'
+        //         sh 'kubectl get nodes'
+        //     }
+        // }
+        // stage('Modify Deployment YAML') {
+        //     steps {
+        //         script {
+        //             dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
+        //                 script {
+        //                     sh "sed -i 's|image: puki121/project:.*|image: puki121/project:${params.imagetag}|' flask-deployment.yaml"
+        //                 } 
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Deploy to cluser') {
+        //     steps {
+        //         dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/Flask-application') {
+        //             sh 'kubectl apply -f flask-namespace.yaml' 
+        //             sh 'kubectl apply -f flask-deployment.yaml'
+        //             sh 'kubectl apply -f flask-service.yaml'
+        //             sh 'kubectl get services -n flask-namespace'
+        //             }
+        //         }
+        //     }
             stage('Configure Monitoring') {
                 steps {
                     script {
