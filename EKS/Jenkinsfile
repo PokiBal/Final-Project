@@ -46,10 +46,9 @@ pipeline {
                 steps {
                     script {
                         dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/monitoring') {
-                            sh 'echo "Load Balancer External IP:"'
-                            def serviceOutput = sh(returnStdout: true, script: "kubectl get services -n flask-namespace")
-                            def externalIP = serviceOutput.tokenize()[6]
-                            sh "echo ${externalIP}"
+                            def serviceOutput = sh(returnStdout: true, script: 'kubectl get services -n flask-namespace')
+                            def externalIP  = serviceOutput.tokenize()[5]
+                            sh "echo external ip is: ${externalIP}"
                             sh "sed -i \"s|targets: \\[.*\\]|targets: ['$externalIP']|\" prometheus.yaml"
                             sh 'echo "Modified prometheus.yaml:"'
                             sh 'cat prometheus.yaml'
