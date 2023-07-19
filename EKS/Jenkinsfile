@@ -49,9 +49,13 @@ pipeline {
                             script: "aws elbv2 describe-load-balancers --query 'LoadBalancers[?contains(LoadBalancerName, `k8s`) && contains(LoadBalancerName, `flask-service`)].DNSName' --output text",
                             returnStdout: true
                         ).trim()
-
                         dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/monitoring') {
-                            sh "sed -i 's|flask-service:${loadBalancerExternalIP}|flask-service:${loadBalancerExternalIP}|' docker-compose.yaml"
+                            sh 'echo "Load Balancer External IP:"'
+                            sh 'echo ${loadBalancerExternalIP}'
+                            sh 'kubectl get services -n flask-namespace'
+                            sh "sed -i \"s|flask-service:a61892bf2cec744dfb3bf11bae6efcb4-1269713099.us-west-2.elb.amazonaws.com|flask-service:${loadBalancerExternalIP}|\" docker-compose.yaml"
+                            sh 'echo "Modified docker-compose.yaml:"'
+                            sh 'cat docker-compose.yaml'
                             sh 'docker-compose up -d'
                         }
                     }
