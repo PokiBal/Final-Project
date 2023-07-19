@@ -46,12 +46,11 @@ pipeline {
                 steps {
                     script {
                         dir('/home/ubuntu/workspace/deployment/Final-Project/EKS/monitoring') {
-                            def serviceOutput = sh(returnStdout: true, script: "kubectl get services -n flask-namespace -o json")
-                            def externalIP = sh(returnStdout: true, script: "echo '${serviceOutput}' | jq -r '.items[0].status.loadBalancer.ingress[0].hostname'")
-                            sh "echo external ip is: ${externalIP}"
-                            sh "sed -i \"s|targets: \\[.*\\]|targets: ['$externalIP']|\" prometheus.yaml"
-                            sh 'echo "Modified prometheus.yaml:"'
-                            sh 'cat prometheus.yaml'
+                            def externalIP = sh(returnStdout: true, script: "kubectl get services -n flask-namespace -o=jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}'")
+                            echo "External IP: ${externalIP}"
+                            //sh "sed -i \"s|targets: \\[.*\\]|targets: ['$externalIP']|\" prometheus.yaml"
+                            //sh 'echo "Modified prometheus.yaml:"'
+                            //sh 'cat prometheus.yaml'
                             //sh 'docker-compose up -d'
                         }
                     }
